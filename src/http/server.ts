@@ -1,7 +1,8 @@
 import express from 'express';
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getFirestore, collection, getDocs, type Firestore } from 'firebase/firestore/lite';
+import { getFirestore, collection, getDocs, type Firestore } from 'firebase/firestore';
+import { doc, setDoc, addDoc } from 'firebase/firestore';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBmlXsRsiIwHh0EfJFIHULEqoZJ5BqvrcU",
@@ -22,13 +23,20 @@ async function getClient(db: Firestore, collectionParam: string) {
     const clientCol = collection(db, collectionParam);
     const clientSnapshot = await getDocs(clientCol);
     const clientList = clientSnapshot.docs.map(doc => doc.data());
-    console.log(clientList);
     return clientList;
 }
 
 app.get('/client', async (req, res) =>  {
     var response = await getClient(db, 'client');
     console.log(response);
+    res.send(response);
+})
+
+app.post('/client/:collection', async (req, res) => {
+    const response = await setDoc(doc(db, "client", req.params.collection), {
+        name: req.headers.name,
+        id: req.headers.id,
+    }); 
     res.send(response);
 })
 
