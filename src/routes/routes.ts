@@ -11,7 +11,8 @@ router.use('/users', userRoutes);
 
 router.use('/auth', authRoutes);
 
-const port = 3001;
+require('dotenv').config();
+const port = 8080;
 const app = express();
 
 app.use(express.json());
