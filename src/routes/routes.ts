@@ -1,65 +1,24 @@
-import { Router } from "express";
 import express from 'express';
-import { initializeApp } from "firebase/app";
-import getClient from "../services/firebaseFunctions";
-import { getFirestore, doc, setDoc, addDoc, collection } from 'firebase/firestore';
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth/web-extension";
-import { getAuth } from "firebase/auth";
-import admin from "firebase-admin";
-
-const firebaseConfig = require("../app/firebaseConfig.json");
-const appBase = initializeApp(firebaseConfig);
-const db = getFirestore(appBase);
-const auth = getAuth(appBase);
+import { Router } from "express";
+import userRoutes from '../routes/user.routes';
+import authRoutes from './auth.routes';
 
 const router = Router();
 router.use(express.json());
 router.use(express.urlencoded({extended: true}));
-var serviceAccount = require("../app/serviceAccountKey.json");
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-})
+router.use('/users', userRoutes);
 
-router.post('/singup', async (req, res) => {
-    const userResponse = await admin.auth().createUser({
-        phoneNumber: req.body.phone
-    });
-    res.json(userResponse);
-});
+router.use('/auth', authRoutes);
 
-router.get('/singin', async (req, res) => {
-    try {
-        const confimation = await signInWithPhoneNumber(auth, req.body.phone)
-        const credential = confimation.confirm("101112");
-        console.log(credential)
-    } catch (error) {
-        console.log(error);
-    }
-})
+const port = 3001;
+const app = express();
 
-router.get('/client', async (req, res) =>  {
-    var response = await getClient(db, 'client');
-    console.log(response);
-    res.send(response);
-})
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
 
-router.post('/client', async (req, res) => {
-    if (req.headers.name == '') {
-        res.send('Require name');
-    } else if (req.headers.id == '') {
-        res.send('Require id');
-    } else {
-        const response = await addDoc(collection(db, "client"), {
-            name: req.headers.name,
-            id: req.headers.id,
-        });
-        res.send(response);
-    }
-})
-
-router.put("/", (req, res) => {
-
+app.listen(port, () => {
+    console.log(`application listening on port ${port}`)
 });
 
 export default router;
