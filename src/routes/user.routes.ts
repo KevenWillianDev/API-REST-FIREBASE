@@ -2,7 +2,7 @@ import { Router } from "express";
 import { initializeApp } from "firebase/app";
 import getRecord from "../services/firebaseFunctions";
 import { getFirestore, doc, setDoc, addDoc, collection } from 'firebase/firestore';
-import userModel from "../models/user.model";
+import userModel from "../models/user/user_model";
 
 var userModels = userModel;
 const userRoutes = Router();
@@ -11,7 +11,7 @@ const appBase = initializeApp(firebaseConfig);
 const db = getFirestore(appBase);
 
 userRoutes.get('/user/:userid', (req, res) => {
-    var response = doc(collection(db, 'user' , req.body.userid));
+    var response = doc(collection(db, 'user', req.body.userid));
     console.log(response);
     res.send(response);
 });
