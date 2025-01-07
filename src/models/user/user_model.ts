@@ -1,6 +1,8 @@
-interface userModel {
+export interface userModel {
     id: Number,
     name: String,
 }
 
-export default userModel;
+export interface userModelData {
+    name: String,
+}

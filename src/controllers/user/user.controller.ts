@@ -1,11 +1,7 @@
-import userModel from "../../models/user/user_model";
+import {userModel, type userModelData } from "../../models/user/user_model";
 
 interface UsersRepository {
-    create(data: userModel): Promise<userModel>;
-}
-
-interface userModelData {
-    name: string
+    create(data: userModelData): Promise<userModel>;
 }
 
 export class CreateUser {
@@ -17,10 +13,10 @@ export class CreateUser {
 
     async handle(data: userModelData): Promise<userModel>{
         data 
-    const user = await this.usersRepository.create({
-        id: 1,
-        name: ''
-    });
+        console.log(data);
+        const user = await this.usersRepository.create({
+            name: data.name
+        });
 
     return user;
   }
