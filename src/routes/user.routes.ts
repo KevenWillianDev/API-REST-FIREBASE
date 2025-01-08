@@ -1,7 +1,7 @@
 import express from 'express';
-import { type userModelData } from '../models/user/user_model';
+import { type userModelData } from '../models/user/user.model';
 import { CreateUser } from '../controllers/user/user.controller';
-import { usersRepository } from '../repositories/user.repository';
+import { UsersRepository } from '../repositories/user.repository';
 
 const userRoutes = express.Router();
 
@@ -21,22 +21,17 @@ const userRoutes = express.Router();
 // });
 
 userRoutes.post('', async (req, res) => {
+  try {
     const { user } = req.body;
-    if (!user.id || user.id === '') {
-      try {
-        const userData: userModelData = {name: user.name};
-        const userRepository = new usersRepository();
-        const createUser = new CreateUser(userRepository);
-        const createdUser = await createUser.handle(userData);
+    const userData: userModelData = user;
+    const userRepository = new UsersRepository();
+    const createUser = new CreateUser(userRepository);
+    const createdUser = await createUser.handle(userData);
 
-        res.status(201).json({ success: true, user: createdUser });
-      } catch (error) {
-        console.log(error);
-        res.status(500).json({ success: false, message: "Error creating user!" });
-      }
-    } else {
-        res.status(400).json({ success: false, message: "ID not permited for created new User!" });
-    }
+    res.status(201).json({ success: true, user: createdUser });
+  } catch (e) {
+    res.status(500).json({ success: false, message: e });
+  }
 });
 
 export default userRoutes;
