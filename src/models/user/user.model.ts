@@ -1,8 +1,8 @@
 export interface userModel {
-    id: Number,
-    name: String,
+    id: string,
+    name: string,
 }
 
 export interface userModelData {
-    name: String,
+    name: string,
 }

@@ -1,6 +1,6 @@
 import express from 'express';
 import { type userModelData } from '../models/user/user.model';
-import { CreateUser } from '../controllers/user/user.controller';
+import { createUser } from '../controllers/user/user.controller';
 import { UsersRepository } from '../repositories/user.repository';
 
 const userRoutes = express.Router();
@@ -25,8 +25,8 @@ userRoutes.post('', async (req, res) => {
     const { user } = req.body;
     const userData: userModelData = user;
     const userRepository = new UsersRepository();
-    const createUser = new CreateUser(userRepository);
-    const createdUser = await createUser.handle(userData);
+    const createUser1 = new createUser(userRepository);
+    const createdUser = await createUser1.handle(userData);
 
     res.status(201).json({ success: true, user: createdUser });
   } catch (e) {

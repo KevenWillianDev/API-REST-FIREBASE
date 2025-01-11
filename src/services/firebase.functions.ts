@@ -1,4 +1,4 @@
-import { addDoc, collection, doc, getDocs, getDoc, setDoc, type Firestore } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, getDoc, type Firestore } from 'firebase/firestore';
 
 export async function getRecord(db: Firestore, collectionParam: string) {
     const referenceCol = collection(db, collectionParam);
